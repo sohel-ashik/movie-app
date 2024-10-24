@@ -83,7 +83,7 @@ export default function MovieDetails({ movie, recommendations, cast }: MovieDeta
 
           {/* Cast */}
           <h2 className="text-xl font-semibold mt-6">Cast</h2>
-          <div className="cast grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="cast grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {cast.map((actor) => (
               <div key={actor.id} className="actor hover:cursor-pointer">
                 {actor.profile_path && (
@@ -92,7 +92,7 @@ export default function MovieDetails({ movie, recommendations, cast }: MovieDeta
                     alt={actor.name}
                     width={100}
                     height={150}
-                    className="rounded-lg"
+                    className="rounded-lg md:w-full md:h-full"
                   />
                 )}
                 <p className="text-sm font-bold">{actor.name}</p>
@@ -130,15 +130,15 @@ export default function MovieDetails({ movie, recommendations, cast }: MovieDeta
 // Pre-render movie details pages at build time
 export const getStaticPaths: GetStaticPaths = async () => {
   // Fetch a few popular movies to pre-render their pages
-  const res = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&page=1`);
-  const data = await res.json();
+  // const res = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&page=1`);
+  // const data = await res.json();
 
-  const paths = data.results.map((movie: { id: number }) => ({
-    params: { id: movie.id.toString() },
-  }));
+  // const paths = data.results.map((movie: { id: number }) => ({
+  //   params: { id: movie.id.toString() },
+  // }));
 
   return {
-    paths,
+    paths: [],
     fallback: true, // Enable ISR for movies not pre-rendered
   };
 };
@@ -146,10 +146,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 // Fetch movie details, cast, and recommendations
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params as { id: string };
+  console.log('xx',`${BASE_URL}/movie/${id}?api_key=${API_KEY}`)
 
   // Fetch movie details
   const resMovie = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`);
   const movie = await resMovie.json();
+
 
   // Fetch movie cast
   const resCast = await fetch(`${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}`);

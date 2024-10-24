@@ -1,4 +1,5 @@
 import Image from "next/image";
+import HomePage from '@/components/Home'
 // import localFont from "next/font/local";
 
 // const geistSans = localFont({
@@ -16,6 +17,7 @@ export default function Home() {
   return (
     <div className="bg-red-200">
       Ashik
+      <HomePage/>
     </div>
   );
 }
