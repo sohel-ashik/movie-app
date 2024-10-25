@@ -92,7 +92,7 @@ export default function MovieDetails({ movie, recommendations, cast }: MovieDeta
                     alt={actor.name}
                     width={100}
                     height={150}
-                    className="rounded-lg md:w-full md:h-full"
+                    className="rounded-lg"
                   />
                 )}
                 <p className="text-sm font-bold">{actor.name}</p>

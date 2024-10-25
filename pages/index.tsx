@@ -15,8 +15,7 @@ import HomePage from '@/components/Home'
 
 export default function Home() {
   return (
-    <div className="bg-red-200">
-      Ashik
+    <div className="container mx-auto px-4 lg:px-8">
       <HomePage/>
     </div>
   );
