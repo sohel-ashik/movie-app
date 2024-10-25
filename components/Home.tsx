@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Image from "next/image";
 import HomeSkeleton from "./HomeSkeleton";
+import { FaBookmark } from "react-icons/fa6";
 
 const getFullLanguageName = (languageCode: string) => {
   const languageMap: { [key: string]: string } = {
@@ -29,6 +30,7 @@ const HomePage = () => {
   const router = useRouter();
   const [searchRefresh, setSerachRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [favouriteIds, setFavouriteIds] = useState(new Map());
 
   // Fetch popular movies or search results based on the current state
   const fetchMovies = async () => {
@@ -57,6 +59,29 @@ const HomePage = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchWatchlistIds = async () => {
+      try {
+        const response = await fetch("/api/watchlist?gettype=getFavouriteIds");
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          const idsMap = new Map(data.map(item => [ item, true])); 
+          setFavouriteIds(idsMap); 
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchWatchlistIds();
+  }, []);
+
+  useEffect(()=>{
+    console.log(favouriteIds)
+  },[favouriteIds])
+
 
   // Load more movies when scrolling
   const loadMoreMovies = () => {
@@ -88,9 +113,6 @@ const HomePage = () => {
 
   return (
     <div className="movie-list">
-      {/* <h1 className="text-3xl font-bold mb-6">Popular Movies</h1> */}
-
-      {/* Search Bar */}
       <form onSubmit={handleSearch} className="py-4 z-50 shadow-md shadow-gray-200 mb-6 bg-gray-50 lg:px-0 px-5 flex justify-center space-x-2 fixed left-0 right-0">
         <input
           type="text"
@@ -121,7 +143,7 @@ const HomePage = () => {
         next={loadMoreMovies}
         hasMore={hasMore}
         loader={
-          <div className="flex justify-center">
+          loading && movies?.length === 0 && <div className="flex justify-center">
             <div className="lg:w-[600px]">
             <HomeSkeleton/>
             </div>
@@ -147,13 +169,18 @@ const HomePage = () => {
                     className="w-20 h-auto rounded-md hover:cursor-pointer"
                     onClick={() => router.push(`/movies/${movie.id}`)}
                   />
-                  <div>
-                    <h3
-                      className="text-lg font-semibold text-gray-800 hover:cursor-pointer hover:text-blue-800"
-                      onClick={() => router.push(`/movies/${movie.id}`)}
-                    >
-                      {movie.title}
-                    </h3>
+                  <div className="w-full">
+                    <div className="flex justify-between gap-4">
+                      <h3
+                        className="text-lg font-semibold text-gray-800 hover:cursor-pointer hover:text-blue-800"
+                        onClick={() => router.push(`/movies/${movie.id}`)}
+                      >
+                        {movie.title}
+                      </h3>
+                      <div className="pt-2">
+                       {favouriteIds.get(movie?.id) && <FaBookmark size={18}/>}
+                      </div>
+                    </div>
                     <p className="text-sm text-gray-600">{movie.release_date}</p>
                     <p className="text-sm text-gray-500">Rating: {movie.vote_average}</p>
 
@@ -177,6 +204,11 @@ const HomePage = () => {
               </li>
             ))}
           </ul>
+          {loading && movies?.length === 0 && <div className="flex justify-center">
+            <div className="lg:w-[600px]">
+            <HomeSkeleton/>
+            </div>
+          </div>}
         </div>
       </InfiniteScroll>
     </div>
