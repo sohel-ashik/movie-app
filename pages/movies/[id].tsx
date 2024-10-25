@@ -58,13 +58,13 @@ export default function MovieDetails({ movie, recommendations, cast }: MovieDeta
     <div className="container mx-auto p-4">
       <div className="movie-details flex flex-col md:flex-row">
         {/* Movie Poster */}
-        <div className="poster">
+        <div className="poster xl:w-[400px]">
           <Image
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             alt={movie.title}
             width={300}
             height={450}
-            className="rounded-lg"
+            className="rounded-lg w-full"
           />
         </div>
 
@@ -79,22 +79,25 @@ export default function MovieDetails({ movie, recommendations, cast }: MovieDeta
               </span>
             ))}
           </div>
-          <p className="overview">{movie.overview}</p>
+          <p className="overview" onClick={()=>console.log(movie)}>{movie.overview}</p>
 
           {/* Cast */}
           <h2 className="text-xl font-semibold mt-6">Cast</h2>
           <div className="cast grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {cast.map((actor) => (
-              <div key={actor.id} className="actor hover:cursor-pointer">
-                {actor.profile_path && (
-                  <Image
-                    src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
-                    alt={actor.name}
-                    width={100}
-                    height={150}
-                    className="rounded-lg"
-                  />
-                )}
+              <div key={actor.id} className="actor hover:cursor-pointer h-full" onClick={()=>console.log(actor.profile_path)}>
+               
+                <Image
+                src={
+                    actor.profile_path
+                    ? `https://image.tmdb.org/t/p/w200${actor.profile_path}`
+                    : '/no_photos.png' 
+                }
+                alt={actor.name}
+                width={100}
+                height={150}
+                className="rounded-lg h-full object-contain"
+                />
                 <p className="text-sm font-bold">{actor.name}</p>
                 <p className="text-xs text-gray-500">as {actor.character}</p>
               </div>
