@@ -1,7 +1,17 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-export default function Recommendations({ recommendations }) {
+interface Recommendation {
+  id: number;
+  title: string;
+  poster_path: string | null;
+}
+
+interface RecommendationsProps {
+  recommendations: Recommendation[];
+}
+
+export default function Recommendations({ recommendations } : RecommendationsProps) {
   const router = useRouter();
   
   return (

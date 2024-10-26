@@ -1,6 +1,16 @@
 import Image from 'next/image';
 
-export default function Cast({ cast }) {
+interface CastMember {
+    id: number;
+    name: string;
+    profile_path: string | null;
+    character: string;
+}
+interface CastProps {
+    cast: CastMember[];
+}
+  
+export default function Cast({ cast } :CastProps) {
   return (
     <div className="cast-section mt-10">
     <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 relative inline-block">

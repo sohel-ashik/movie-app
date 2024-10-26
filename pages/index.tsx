@@ -1,4 +1,3 @@
-import Image from "next/image";
 import HomePage from '@/components/Home'
 import WatchListBtn from "@/components/WatchListViewButton";
 // import localFont from "next/font/local";

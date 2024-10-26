@@ -9,18 +9,54 @@ import Image from 'next/image';
 import MovieDetailsSkeleton from '@/components/MovieDetailsSkeleton';
 import { MdImageNotSupported } from 'react-icons/md';
 
-
-
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-const BASE_URL = 'https://api.themoviedb.org/3';
+const BASE_URL = "https://api.themoviedb.org/3";
 
-export default function MovieDetails({ movie, cast, recommendations }) {
+type Genre = {
+  id: number;
+  name: string;
+};
+
+type Movie = {
+  id: number;
+  title: string;
+  release_date: string;
+  runtime: number;
+  genres: Genre[];
+  vote_average: number;
+  vote_count: number;
+  tagline?: string;
+  overview: string;
+  revenue: number;
+  poster_path?: string;
+  homepage?: string;
+};
+
+interface CastMember {
+  id: number;
+  name: string;
+  profile_path: string | null;
+  character: string;
+}
+interface Recommendation {
+  id: number;
+  title: string;
+  poster_path: string | null;
+}
+
+type MovieDetailsProps = {
+  movie: Movie;
+  cast: CastMember[];
+  recommendations: Recommendation[];
+};
+
+export default function MovieDetails({ movie, cast, recommendations }: MovieDetailsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [isFavourite, setIsFavourite] = useState(false);
 
   // Add to watchlist function
-  const addToWatchlist = async (movie) => {
+  const addToWatchlist = async (movie: Movie) => {
     try {
       await fetch("/api/watchlist", {
         method: "POST",
@@ -35,7 +71,7 @@ export default function MovieDetails({ movie, cast, recommendations }) {
   };
 
   // Delete from watchlist function
-  const handleDelete = async (movieId) => {
+  const handleDelete = async (movieId: number) => {
     try {
       await fetch(`/api/watchlist?id=${movieId}`, {
         method: "DELETE",
@@ -87,125 +123,116 @@ export default function MovieDetails({ movie, cast, recommendations }) {
 
   if (router.isFallback || loading) {
     return (
-        <div>
-            <Navbar/>
-            <MovieDetailsSkeleton/>
-        </div>
-    )
+      <div>
+        <Navbar />
+        <MovieDetailsSkeleton />
+      </div>
+    );
   }
 
   return (
-    <div className='xl:px-80'>
+    <div className="xl:px-80">
       <Navbar />
-      <div className="container mx-auto  p-4 mt-20">
+      <div className="container mx-auto p-4 mt-20">
         <div className="movie-details flex flex-col md:flex-row">
-          
-        <div className="poster xl:w-[400px] ">
-          {movie.poster_path ? (
-            <Image
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
-              width={300}
-              height={450}
-              className="rounded-lg w-full"
-            />
-          ) : (
-            <div className="w-full md:w-[300px] h-[450px] flex items-center justify-center border bg-red-950  rounded-lg">
-              <MdImageNotSupported className="text-gray-400" size={40} />
-            </div>
-          )}
-        </div>
+          <div className="poster xl:w-[400px] ">
+            {movie.poster_path ? (
+              <Image
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+                width={300}
+                height={450}
+                className="rounded-lg w-full"
+              />
+            ) : (
+              <div className="w-full md:w-[300px] h-[450px] flex items-center justify-center border bg-red-950 rounded-lg">
+                <MdImageNotSupported className="text-gray-400" size={40} />
+              </div>
+            )}
+          </div>
 
-
-         
           <div className="movie-info flex-1 md:ml-6 mt-10 md:mt-0">
-            {/* Movie Title and Watchlist Button */}
             <div className="flex justify-between items-start">
-                <h1 className="text-3xl font-bold leading-tight mb-2">{movie.title}</h1>
-                <button
+              <h1 className="text-3xl font-bold leading-tight mb-2">{movie.title}</h1>
+              <button
                 onClick={handleClick}
                 className={`hidden md:flex items-center justify-center gap-2 px-4 py-2 rounded-md text-white transition-all duration-300
-                    ${isFavourite ? 'bg-gradient-to-r from-red-950 to-gray-900 hover:from-red-800 hover:to-gray-700' : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'} 
+                  ${
+                    isFavourite
+                      ? 'bg-gradient-to-r from-red-950 to-gray-900 hover:from-red-800 hover:to-gray-700'
+                      : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'
+                  }
                 `}
-                >
+              >
                 {isFavourite ? <AiOutlineCheck size={20} /> : <AiOutlinePlus size={20} />}
                 {isFavourite ? 'Remove from Watchlist' : 'Add to Watchlist'}
-                </button>
+              </button>
             </div>
 
-            {/* Release Date, Runtime, and Genres */}
             <div className="flex flex-wrap items-center text-sm text-gray-500 mb-4">
-                <p className="mr-4">Release Date: {movie.release_date}</p>
-                <p className="mr-4">Runtime: {movie.runtime} min</p>
+              <p className="mr-4">Release Date: {movie.release_date}</p>
+              <p className="mr-4">Runtime: {movie.runtime} min</p>
             </div>
 
-            {/* Genres, Vote Average, and Vote Count */}
             <div className="genres flex flex-wrap gap-2 mb-4">
-                {movie.genres.map((genre) => (
+              {movie.genres.map((genre) => (
                 <span
-                    key={genre.id}
-                    className="inline-block bg-blue-200 text-blue-800 text-sm px-2 py-1 rounded"
+                  key={genre.id}
+                  className="inline-block bg-blue-200 text-blue-800 text-sm px-2 py-1 rounded"
                 >
-                    {genre.name}
+                  {genre.name}
                 </span>
-                ))}
-                <div className="flex items-center gap-4 text-sm text-gray-500">
+              ))}
+              <div className="flex items-center gap-4 text-sm text-gray-500">
                 <p className="flex items-center gap-1">
-                    <span className="font-bold text-gray-700">★ {movie.vote_average}</span> ({movie.vote_count} votes)
+                  <span className="font-bold text-gray-700">★ {movie.vote_average}</span> (
+                  {movie.vote_count} votes)
                 </p>
-                </div>
+              </div>
             </div>
 
-            {/* Tagline */}
             {movie.tagline && (
-                <div className="tagline mt-4 mb-4">
-                <p className="italic text-gray-600">"{movie.tagline}"</p>
-                </div>
+              <div className="tagline mt-4 mb-4">
+                <p className="italic text-gray-600">{movie.tagline}</p>
+              </div>
             )}
 
-            {/* Movie Overview */}
-            <p className="overview mb-4 text-base text-gray-700" onClick={() => console.log(movie)}>
-                {movie.overview}
-            </p>
+            <p className="overview mb-4 text-base text-gray-700">{movie.overview}</p>
 
-            {/* Revenue */}
             <div className="text-sm text-gray-500 mb-4">
-                <p>Revenue: ${movie.revenue.toLocaleString()}</p>
+              <p>Revenue: ${movie.revenue.toLocaleString()}</p>
             </div>
 
-            {/* Homepage Link */}
             {movie.homepage && (
-                <div className="homepage mb-6">
+              <div className="homepage mb-6">
                 <a
-                    href={movie.homepage}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block text-blue-600 hover:underline text-sm"
+                  href={movie.homepage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-blue-600 hover:underline text-sm"
                 >
-                    Official Website
+                  Official Website
                 </a>
-                </div>
+              </div>
             )}
 
-            {/* Watchlist Button for Mobile */}
             <button
-                onClick={handleClick}
-                className={`flex md:hidden mt-5 text-sm items-center justify-center gap-2 px-4 py-2 rounded-md text-white transition-all duration-300
-                ${isFavourite ? 'bg-gradient-to-r from-red-950 to-gray-900 hover:from-red-800 hover:to-gray-700' : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'} 
-                `}
+              onClick={handleClick}
+              className={`flex md:hidden mt-5 text-sm items-center justify-center gap-2 px-4 py-2 rounded-md text-white transition-all duration-300
+                ${
+                  isFavourite
+                    ? 'bg-gradient-to-r from-red-950 to-gray-900 hover:from-red-800 hover:to-gray-700'
+                    : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'
+                }
+              `}
             >
-                {isFavourite ? <AiOutlineCheck size={20} /> : <AiOutlinePlus size={20} />}
-                {isFavourite ? 'Remove from Watchlist' : 'Add to Watchlist'}
+              {isFavourite ? <AiOutlineCheck size={20} /> : <AiOutlinePlus size={20} />}
+              {isFavourite ? 'Remove from Watchlist' : 'Add to Watchlist'}
             </button>
-            </div>
-
-
+          </div>
         </div>
 
-        {/* Cast  */}
         <Cast cast={cast} />
-
-        {/* Recommendations  */}
         <Recommendations recommendations={recommendations} />
       </div>
     </div>
@@ -221,14 +248,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { id } = params;
-  try{
+  const { id } = params as { id: string };
+  try {
     const resMovie = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`);
     const movie = await resMovie.json();
     const resCast = await fetch(`${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}`);
     const castData = await resCast.json();
     const cast = castData.cast.slice(0, 8);
-    const resRecommendations = await fetch(`${BASE_URL}/movie/${movie.id}/recommendations?api_key=${API_KEY}`);
+    const resRecommendations = await fetch(
+      `${BASE_URL}/movie/${movie.id}/recommendations?api_key=${API_KEY}`
+    );
     const recommendationsData = await resRecommendations.json();
     const recommendations = recommendationsData.results.slice(0, 8);
 
@@ -240,10 +269,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       },
       revalidate: 60,
     };
-  }catch(err){
+  } catch (err) {
     console.log(err);
     return {
-      notFound: true
-    }
+      notFound: true,
+    };
   }
 };
