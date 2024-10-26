@@ -1,40 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Movie App
 
-## Getting Started
+This project is a movie search and favorite movie listing application, featuring infinite scrolling for favorite and search results, movie details using Incremental Static Regeneration (ISR) and Server-Side Rendering (SSR), and a watchlist management system.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Infinite Scroll for Favorite and Search Results**
+   - Implemented infinite scroll for both the favorite movies section and search results to provide a smooth and seamless browsing experience.
+   
+2. **Movie Details Page**
+   - The movie details page leverages both ISR and SSR for optimized performance, allowing incremental static regeneration for fresh data and server-side rendering for improved SEO.
+   
+3. **Watchlist Page**
+   - Users can manage their watchlist, with the ability to add, remove, and view detailed information about their favorite movies.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. **Responsive UI**
+   - A fully responsive UI created with Tailwind CSS, ensuring that the app looks great on all devices.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Technologies Used
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+- **TypeScript**: For type-safe development.
+- **Next.js**: As the framework for server-side rendering and incremental static regeneration.
+- **Tailwind CSS**: For styling the UI with a utility-first approach.
+- **React Icons**: For integrating icons in the UI.
+- **React Infinite Scroll Component**: For implementing infinite scroll functionality in the favorites and search results.
