@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Navbar from "@/components/Nav";
+import HomeSkeleton from "@/components/HomeSkeleton"; // Import your skeleton component
 import { FiTrash } from "react-icons/fi";
 
 const getFullLanguageName = (languageCode: string) => {
@@ -31,15 +32,22 @@ type Movie = {
 
 const WatchlistPage = () => {
   const [watchlist, setWatchlist] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true); // New loading state
   const router = useRouter();
 
   // Fetch watchlist on page load
   useEffect(() => {
     const fetchWatchlist = async () => {
-      const response = await fetch("/api/watchlist");
-      const data: Movie[] = await response.json();
-      console.log("Watchlist:", data);
-      setWatchlist(data);
+      try {
+        const response = await fetch("/api/watchlist");
+        const data: Movie[] = await response.json();
+        console.log("Watchlist:", data);
+        setWatchlist(data);
+      } catch (error) {
+        console.error("Error fetching watchlist:", error);
+      } finally {
+        setLoading(false); // Hide skeleton after data is fetched
+      }
     };
 
     fetchWatchlist();
@@ -70,7 +78,11 @@ const WatchlistPage = () => {
       <div className="container flex flex-col items-center justify-center mx-auto px-4 lg:px-8 max-w-2xl md:mt-30 mt-20">
         <h1 className="text-2xl font-bold mb-6 w-full px-4">My Watchlist</h1>
 
-        {watchlist.length === 0 ? (
+        {loading ? (
+          <div className="w-full">
+            <HomeSkeleton /> 
+          </div>
+        ) : watchlist.length === 0 ? (
           <p className="w-full px-4">No movies in your watchlist</p>
         ) : (
           <ul className="w-full">

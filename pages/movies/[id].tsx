@@ -131,7 +131,7 @@ export default function MovieDetails({ movie, cast, recommendations }: MovieDeta
   }
 
   return (
-    <div className="xl:px-80">
+    <div className="xl:px-64 xxl:px-80">
       <Navbar />
       <div className="container mx-auto p-4 mt-20">
         <div className="movie-details flex flex-col md:flex-row">
@@ -152,9 +152,9 @@ export default function MovieDetails({ movie, cast, recommendations }: MovieDeta
           </div>
 
           <div className="movie-info flex-1 md:ml-6 mt-10 md:mt-0">
-            <div className="flex justify-between items-start">
+            <div className="flex flex-col justify-start items-start">
               <h1 className="text-3xl font-bold leading-tight mb-2">{movie.title}</h1>
-              <button
+              {/* <button
                 onClick={handleClick}
                 className={`hidden md:flex items-center justify-center gap-2 px-4 py-2 rounded-md text-white transition-all duration-300
                   ${
@@ -166,7 +166,7 @@ export default function MovieDetails({ movie, cast, recommendations }: MovieDeta
               >
                 {isFavourite ? <AiOutlineCheck size={20} /> : <AiOutlinePlus size={20} />}
                 {isFavourite ? 'Remove from Watchlist' : 'Add to Watchlist'}
-              </button>
+              </button> */}
             </div>
 
             <div className="flex flex-wrap items-center text-sm text-gray-500 mb-4">
@@ -218,7 +218,7 @@ export default function MovieDetails({ movie, cast, recommendations }: MovieDeta
 
             <button
               onClick={handleClick}
-              className={`flex md:hidden mt-5 text-sm items-center justify-center gap-2 px-4 py-2 rounded-md text-white transition-all duration-300
+              className={`flex  mt-5 text-sm items-center justify-center gap-2 px-4 py-2 rounded-md text-white transition-all duration-300
                 ${
                   isFavourite
                     ? 'bg-gradient-to-r from-red-950 to-gray-900 hover:from-red-800 hover:to-gray-700'
