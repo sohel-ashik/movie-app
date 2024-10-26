@@ -58,16 +58,16 @@ const WatchlistPage = () => {
     <div>
         <Navbar/>
         <div className="container  flex flex-col items-center justify-center mx-auto px-4 lg:px-8 max-w-2xl md:mt-30 mt-20">
-        <h1 className="text-2xl font-bold mb-6">My Watchlist</h1>
+        <h1 className="text-2xl font-bold mb-6 w-full px-4">My Watchlist</h1>
 
         {watchlist.length === 0 ? (
             <p>No movies in your watchlist</p>
         ) : (
-            <ul>
+            <ul className="w-full">
             {watchlist.map((movie) => (
                 <li
                 key={movie.id}
-                className="mb-6 p-4 border-b border-gray-300 hover:shadow-lg transition-shadow duration-300"
+                className="mb-6 p-4  border-b border-gray-300 hover:shadow-lg transition-shadow duration-300"
                 >
                 <div className="flex items-start space-x-4">
                     <img
@@ -86,7 +86,7 @@ const WatchlistPage = () => {
                         </h3>
                         <button
                             onClick={() => handleDelete(movie.id)}
-                            className="hidden lg:flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+                            className="hidden lg:flex items-center space-x-2 bg-gradient-to-r from-red-300 via-pink-400 to-red-500 hover:from-red-400 hover:via-pink-500 hover:to-red-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
                         >
                             <FiTrash className="text-white text-lg" />
                             <span>Delete</span>
@@ -116,7 +116,8 @@ const WatchlistPage = () => {
                 </div>
                 <button
                     onClick={() => handleDelete(movie.id)}
-                    className="lg:hidden flex mt-2 w-full justify-center items-center space-x-2 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+                    className="lg:hidden flex mt-2 w-full justify-center items-center space-x-2 bg-rose-500 hover:bg-rose-600 text-white shadow-md hover:shadow-lg
+ font-medium py-2 px-4 rounded-md transition-colors duration-300"
                 >
                     <FiTrash className="text-white text-lg" />
                     <span>Delete</span>

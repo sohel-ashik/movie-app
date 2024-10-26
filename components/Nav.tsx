@@ -7,7 +7,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div className="container mx-auto px-4 xl:px-36 py-3 flex justify-between items-center">
         {/* Home Icon */}
         <div
           className="text-gray-800 text-2xl font-bold flex items-center space-x-2 cursor-pointer"
