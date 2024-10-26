@@ -2,7 +2,7 @@
 const MovieDetailsSkeleton = () => {
   
     return (
-        <div className="container mx-auto p-4 mt-20 animate-pulse">
+        <div className="container mx-auto p-4 mt-20 animate-pulse xl:px-40">
         <div className="movie-details flex flex-col md:flex-row gap-6">
           
           {/* Poster Skeleton */}

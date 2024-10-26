@@ -61,7 +61,7 @@ const WatchlistPage = () => {
         <h1 className="text-2xl font-bold mb-6 w-full px-4">My Watchlist</h1>
 
         {watchlist.length === 0 ? (
-            <p>No movies in your watchlist</p>
+            <p className="w-full px-4">No movies in your watchlist</p>
         ) : (
             <ul className="w-full">
             {watchlist.map((movie) => (
@@ -86,7 +86,7 @@ const WatchlistPage = () => {
                         </h3>
                         <button
                             onClick={() => handleDelete(movie.id)}
-                            className="hidden lg:flex items-center space-x-2 bg-gradient-to-r from-red-300 via-pink-400 to-red-500 hover:from-red-400 hover:via-pink-500 hover:to-red-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+                            className="hidden lg:flex items-center space-x-2 bg-gradient-to-r from-red-800 to-gray-900  hover:to-red-800 hover:from-gray-900 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
                         >
                             <FiTrash className="text-white text-lg" />
                             <span>Delete</span>
@@ -116,7 +116,7 @@ const WatchlistPage = () => {
                 </div>
                 <button
                     onClick={() => handleDelete(movie.id)}
-                    className="lg:hidden flex mt-2 w-full justify-center items-center space-x-2 bg-rose-500 hover:bg-rose-600 text-white shadow-md hover:shadow-lg
+                    className="lg:hidden flex mt-2 w-full justify-center items-center space-x-2 bg-gradient-to-r from-red-800 to-gray-900 text-white shadow-md hover:shadow-lg
  font-medium py-2 px-4 rounded-md transition-colors duration-300"
                 >
                     <FiTrash className="text-white text-lg" />

@@ -7,16 +7,10 @@ import Cast from '@/components/Cast';
 import Recommendations from '@/components/Recommendations';
 import Image from 'next/image';
 import MovieDetailsSkeleton from '@/components/MovieDetailsSkeleton';
+import { MdImageNotSupported } from 'react-icons/md';
 
 
-function CircularLoader() {
-    return (
-      <div className='flex justify-center items-center h-screen'>
-        <div className='animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500'></div>
-      </div>
-    );
-  }
-// TMDB API configuration
+
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
@@ -106,7 +100,8 @@ export default function MovieDetails({ movie, cast, recommendations }) {
       <div className="container mx-auto  p-4 mt-20">
         <div className="movie-details flex flex-col md:flex-row">
           
-          <div className="poster xl:w-[400px]">
+        <div className="poster xl:w-[400px] ">
+          {movie.poster_path ? (
             <Image
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title}
@@ -114,7 +109,13 @@ export default function MovieDetails({ movie, cast, recommendations }) {
               height={450}
               className="rounded-lg w-full"
             />
-          </div>
+          ) : (
+            <div className="w-full md:w-[300px] h-[450px] flex items-center justify-center border bg-red-950  rounded-lg">
+              <MdImageNotSupported className="text-gray-400" size={40} />
+            </div>
+          )}
+        </div>
+
 
          
           <div className="movie-info flex-1 md:ml-6 mt-10 md:mt-0">
@@ -124,7 +125,7 @@ export default function MovieDetails({ movie, cast, recommendations }) {
                 <button
                 onClick={handleClick}
                 className={`hidden md:flex items-center justify-center gap-2 px-4 py-2 rounded-md text-white transition-all duration-300
-                    ${isFavourite ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'} 
+                    ${isFavourite ? 'bg-gradient-to-r from-red-950 to-gray-900 hover:from-red-800 hover:to-gray-700' : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'} 
                 `}
                 >
                 {isFavourite ? <AiOutlineCheck size={20} /> : <AiOutlinePlus size={20} />}
@@ -190,7 +191,7 @@ export default function MovieDetails({ movie, cast, recommendations }) {
             <button
                 onClick={handleClick}
                 className={`flex md:hidden mt-5 text-sm items-center justify-center gap-2 px-4 py-2 rounded-md text-white transition-all duration-300
-                ${isFavourite ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'} 
+                ${isFavourite ? 'bg-gradient-to-r from-red-950 to-gray-900 hover:from-red-800 hover:to-gray-700' : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'} 
                 `}
             >
                 {isFavourite ? <AiOutlineCheck size={20} /> : <AiOutlinePlus size={20} />}
@@ -221,21 +222,28 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params;
-  const resMovie = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`);
-  const movie = await resMovie.json();
-  const resCast = await fetch(`${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}`);
-  const castData = await resCast.json();
-  const cast = castData.cast.slice(0, 8);
-  const resRecommendations = await fetch(`${BASE_URL}/movie/${movie.id}/recommendations?api_key=${API_KEY}`);
-  const recommendationsData = await resRecommendations.json();
-  const recommendations = recommendationsData.results.slice(0, 8);
+  try{
+    const resMovie = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`);
+    const movie = await resMovie.json();
+    const resCast = await fetch(`${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}`);
+    const castData = await resCast.json();
+    const cast = castData.cast.slice(0, 8);
+    const resRecommendations = await fetch(`${BASE_URL}/movie/${movie.id}/recommendations?api_key=${API_KEY}`);
+    const recommendationsData = await resRecommendations.json();
+    const recommendations = recommendationsData.results.slice(0, 8);
 
-  return {
-    props: {
-      movie,
-      cast,
-      recommendations,
-    },
-    revalidate: 60,
-  };
+    return {
+      props: {
+        movie,
+        cast,
+        recommendations,
+      },
+      revalidate: 60,
+    };
+  }catch(err){
+    console.log(err);
+    return {
+      notFound: true
+    }
+  }
 };

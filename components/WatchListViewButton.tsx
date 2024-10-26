@@ -18,7 +18,7 @@ const WatchListBtn = () => {
                     <IoBookmarks className='lg:size-7 size-4' />
                 </div>
                 <span className={`ml-3 overflow-hidden transition-all text-center duration-300 ease-in-out ${isHovered ? 'opacity-100' : 'opacity-0'} whitespace-nowrap`}>
-                    View Watchlist
+                    Watchlist
                 </span>
             </div>
         </Link>

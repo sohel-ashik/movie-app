@@ -4,6 +4,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Image from "next/image";
 import HomeSkeleton from "./HomeSkeleton";
 import { FaBookmark } from "react-icons/fa6";
+import { AiOutlineSearch, AiOutlineClose, AiOutlineExclamationCircle } from "react-icons/ai";
+import { MdImageNotSupported } from "react-icons/md";
 
 const getFullLanguageName = (languageCode: string) => {
   const languageMap: { [key: string]: string } = {
@@ -95,6 +97,7 @@ const HomePage = () => {
     setPage(1);
     setHasMore(true);
     setMovies([]); // Clear current movie list
+    setSerachRefresh(pre=>!pre)
   };
 
   // Trigger search
@@ -109,34 +112,50 @@ const HomePage = () => {
   // Fetch movies initially or when page or searching state changes
   useEffect(() => {
     fetchMovies();
-  }, [page, searching,searchRefresh]);
+  }, [page, searching, searchRefresh]);
+
+  useEffect(()=>{
+    if(query.length === 0){
+      fetchMovies();
+    }
+  },[query])
 
   return (
     <div className="movie-list">
-      <form onSubmit={handleSearch} className="py-4 z-50 shadow-md shadow-gray-200 mb-6 bg-gray-50 lg:px-0 px-5 flex justify-center space-x-2 fixed left-0 right-0">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search movies..."
-          className="border border-gray-400 px-4 py-2 rounded-md w-full lg:w-1/2"
-        />
+
+      <form onSubmit={handleSearch} className="py-4 z-50 shadow-md shadow-red-950 bg-gradient-to-r from-red-950 to-red-800  mb-6  lg:px-0 px-5 flex justify-center fixed left-0 right-0">
+        <div className="relative w-full md:w-[530px]">
+          {/* Input Field with Clear Icon */}
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search movies..."
+            className="border focus:outline-none border-gray-400 px-4 py-2 rounded-tl-md rounded-bl-md w-full pr-10" // Padding-right for space for the clear icon
+          />
+          
+          {/* Clear Button inside Input */}
+          {query && (
+            <button
+              type="button"
+              onClick={clearSearch}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              <AiOutlineClose size={20} />
+            </button>
+          )}
+        </div>
+
+        {/* Search Icon Button */}
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+          className="px-4 py-2 bg-gradient-to-r from-red-950 to-gray-900 text-white rounded-tr-md rounded-br-md hover:from-red-800 hover:to-gray-700 flex items-center transition-all duration-300"
         >
-          Search
+          <AiOutlineSearch size={20} />
         </button>
-        {query && (
-          <button
-            type="button"
-            onClick={clearSearch}
-            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700"
-          >
-            Clear
-          </button>
-        )}
+
       </form>
+
 
       <InfiniteScroll
         dataLength={movies.length}
@@ -163,12 +182,15 @@ const HomePage = () => {
                 className="mb-6 p-4 border-b border-gray-300 hover:shadow-lg transition-shadow duration-300"
               >
                 <div className="flex items-start space-x-4">
-                  <img
+                  {movie.poster_path ? <img
                     src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
                     alt={movie.title}
                     className="w-20 h-auto rounded-md hover:cursor-pointer"
                     onClick={() => router.push(`/movies/${movie.id}`)}
-                  />
+                  /> : <div className="min-w-20 h-28 flex items-center justify-center border bg-red-950 rounded-md">
+                        <MdImageNotSupported  className="text-white" size={24} />
+                      </div>
+                    }
                   <div className="w-full">
                     <div className="flex justify-between gap-4">
                       <h3
