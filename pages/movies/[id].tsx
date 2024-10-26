@@ -119,7 +119,7 @@ export default function MovieDetails({ movie, cast, recommendations }: MovieDeta
       }
     };
     fetchAvailability();
-  }, [isFavourite, movie]);
+  }, []);
 
   if (router.isFallback || loading) {
     return (
